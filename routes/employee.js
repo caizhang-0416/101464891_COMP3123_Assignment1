@@ -24,7 +24,7 @@ router.post('/employees', async (req, res) => {
     }
 });
 
-// 3. GET /api/v1/emp/employees/{eid}
+// 3. GET /api/v1/emp/employees/:eid
 router.get('/employees/:eid', async (req, res) => {
     try {
         const employee = await Employee.findById(req.params.eid);
@@ -38,7 +38,7 @@ router.get('/employees/:eid', async (req, res) => {
     }
 });
 
-// 4. PUT /api/v1/emp/employees/{eid}
+// 4. PUT /api/v1/emp/employees/:eid
 router.put('/employees/:eid', async (req, res) => {
     try {
         const updatedEmployee = await Employee.findByIdAndUpdate(req.params.eid, req.body, { new: true });
@@ -52,7 +52,7 @@ router.put('/employees/:eid', async (req, res) => {
     }
 });
 
-// 5. DELETE /api/v1/emp/employees?eid=xxx
+// 5. DELETE /api/v1/emp/employees
 router.delete('/employees', async (req, res) => {
     const { eid } = req.query;
     try {

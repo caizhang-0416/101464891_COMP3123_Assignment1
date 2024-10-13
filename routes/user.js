@@ -33,34 +33,34 @@ router.post('/signup', [
   }
 });
 
-module.exports = router;
-
 // POST /api/v1/user/login
 router.post('/login', [
-    body('email').isEmail().withMessage('Invalid email'),
-    body('password').notEmpty().withMessage('Password is required')
-  ], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+  body('email').isEmail().withMessage('Invalid email'),
+  body('password').notEmpty().withMessage('Password is required')
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid Username and password' });
     }
-  
-    const { email, password } = req.body;
-  
-    try {
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ message: 'Invalid Username and password' });
-      }
-  
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid Username and password' });
-      }
-  
-      res.status(200).json({ message: 'Login successful' });
-    } catch (err) {
-      res.status(500).json({ error: 'Server error' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid Username and password' });
     }
-  });
-  
+
+    res.status(200).json({ message: 'Login successful' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Export the router
+module.exports = router;
