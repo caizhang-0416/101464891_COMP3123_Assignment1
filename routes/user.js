@@ -29,7 +29,7 @@ router.post('/signup', [
     await newUser.save();
     res.status(201).json({ message: 'User created successfully', user_id: newUser._id });
   } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error', message: err });
   }
 });
 
